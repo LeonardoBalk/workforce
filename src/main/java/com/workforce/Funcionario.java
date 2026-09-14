@@ -24,7 +24,7 @@ public class Funcionario extends Pessoa {
     }
 
     public void aumentarSalario(BigDecimal percentual) {
-        salario = salario.add(salario.multiply(percentual));
+        salario = salario.add(salario.multiply(percentual)).setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal calcularSalariosMinimos(BigDecimal salarioMinimo) {
