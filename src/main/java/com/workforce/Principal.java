@@ -5,7 +5,10 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -14,7 +17,15 @@ public class Principal {
 
         List<Funcionario> funcionarios = cadastrarFuncionarios();
         removerJoao(funcionarios);
+
+        System.out.println("3.3 - Lista de todos os funcionários");
         imprimirFuncionarios(funcionarios);
+
+        aumentarSalarios(funcionarios);
+
+        Map<String, List<Funcionario>> porFuncao = agruparPorFuncao(funcionarios);
+        System.out.println("3.6 - Funcionários agrupados por função");
+        imprimirAgrupados(porFuncao);
     }
 
     private static List<Funcionario> cadastrarFuncionarios() {
@@ -37,9 +48,26 @@ public class Principal {
     }
 
     private static void imprimirFuncionarios(List<Funcionario> funcionarios) {
-        System.out.println("3.3 - Lista de todos os funcionários");
         for (Funcionario funcionario : funcionarios) {
             System.out.println(funcionario);
+        }
+    }
+
+    private static void aumentarSalarios(List<Funcionario> funcionarios) {
+        for (Funcionario funcionario : funcionarios) {
+            funcionario.aumentarSalario(new BigDecimal("0.10"));
+        }
+    }
+
+    private static Map<String, List<Funcionario>> agruparPorFuncao(List<Funcionario> funcionarios) {
+        return funcionarios.stream()
+                .collect(Collectors.groupingBy(Funcionario::getFuncao, LinkedHashMap::new, Collectors.toList()));
+    }
+
+    private static void imprimirAgrupados(Map<String, List<Funcionario>> porFuncao) {
+        for (Map.Entry<String, List<Funcionario>> entrada : porFuncao.entrySet()) {
+            System.out.println(entrada.getKey() + ":");
+            imprimirFuncionarios(entrada.getValue());
         }
     }
 }
