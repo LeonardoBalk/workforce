@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 public class Principal {
 
+    private static final BigDecimal SALARIO_MINIMO = new BigDecimal("1212.00");
+
     public static void main(String[] args) {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
@@ -37,6 +39,12 @@ public class Principal {
 
         System.out.println("3.10 - Funcionários em ordem alfabética");
         imprimirOrdemAlfabetica(funcionarios);
+
+        System.out.println("3.11 - Soma total dos salários");
+        imprimirSomaSalarios(funcionarios);
+
+        System.out.println("3.12 - Quantidade de salários mínimos por funcionário");
+        imprimirSalariosMinimos(funcionarios);
     }
 
     private static List<Funcionario> cadastrarFuncionarios() {
@@ -102,5 +110,19 @@ public class Principal {
         List<Funcionario> ordenados = new ArrayList<>(funcionarios);
         ordenados.sort(Comparator.comparing(Funcionario::getNome));
         imprimirFuncionarios(ordenados);
+    }
+
+    private static void imprimirSomaSalarios(List<Funcionario> funcionarios) {
+        BigDecimal total = funcionarios.stream()
+                .map(Funcionario::getSalario)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println(Formatador.formatarValor(total));
+    }
+
+    private static void imprimirSalariosMinimos(List<Funcionario> funcionarios) {
+        for (Funcionario funcionario : funcionarios) {
+            BigDecimal salariosMinimos = funcionario.calcularSalariosMinimos(SALARIO_MINIMO);
+            System.out.println(funcionario.getNome() + ": " + Formatador.formatarValor(salariosMinimos) + " salários mínimos");
+        }
     }
 }
