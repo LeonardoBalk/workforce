@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,15 @@ public class Principal {
         Map<String, List<Funcionario>> porFuncao = agruparPorFuncao(funcionarios);
         System.out.println("3.6 - Funcionários agrupados por função");
         imprimirAgrupados(porFuncao);
+
+        System.out.println("3.8 - Funcionários que fazem aniversário em outubro ou dezembro");
+        imprimirAniversariantes(funcionarios);
+
+        System.out.println("3.9 - Funcionário com maior idade");
+        imprimirMaisVelho(funcionarios);
+
+        System.out.println("3.10 - Funcionários em ordem alfabética");
+        imprimirOrdemAlfabetica(funcionarios);
     }
 
     private static List<Funcionario> cadastrarFuncionarios() {
@@ -69,5 +80,27 @@ public class Principal {
             System.out.println(entrada.getKey() + ":");
             imprimirFuncionarios(entrada.getValue());
         }
+    }
+
+    private static void imprimirAniversariantes(List<Funcionario> funcionarios) {
+        List<Funcionario> aniversariantes = new ArrayList<>();
+        for (Funcionario funcionario : funcionarios) {
+            int mes = funcionario.getDataNascimento().getMonthValue();
+            if (mes == 10 || mes == 12) {
+                aniversariantes.add(funcionario);
+            }
+        }
+        imprimirFuncionarios(aniversariantes);
+    }
+
+    private static void imprimirMaisVelho(List<Funcionario> funcionarios) {
+        Funcionario maisVelho = Collections.min(funcionarios, Comparator.comparing(Funcionario::getDataNascimento));
+        System.out.println("Nome: " + maisVelho.getNome() + " | Idade: " + maisVelho.getIdade());
+    }
+
+    private static void imprimirOrdemAlfabetica(List<Funcionario> funcionarios) {
+        List<Funcionario> ordenados = new ArrayList<>(funcionarios);
+        ordenados.sort(Comparator.comparing(Funcionario::getNome));
+        imprimirFuncionarios(ordenados);
     }
 }
