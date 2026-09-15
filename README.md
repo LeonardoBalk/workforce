@@ -35,6 +35,16 @@ mvn package
 java -jar target/workforce.jar
 ```
 
+## Testes
+
+```sh
+mvn test
+```
+
+Cobrem cadastro, remoção, agrupamento por função, aniversariantes, ordenação, reajuste e conversão em salários mínimos.
+
+Cada reajuste é arredondado para duas casas decimais com `RoundingMode.HALF_UP`, e o total soma os salários já arredondados.
+
 ## Acentos aparecendo errado no terminal
 
 No Windows, o console pode não estar configurado para UTF-8 por padrão. Se nomes e palavras acentuadas saírem ilegíveis, rode antes de executar:
