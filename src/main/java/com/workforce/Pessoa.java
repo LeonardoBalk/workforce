@@ -22,6 +22,10 @@ public class Pessoa {
     }
 
     public int getIdade() {
-        return Period.between(dataNascimento, LocalDate.now()).getYears();
+        return getIdade(LocalDate.now());
+    }
+
+    public int getIdade(LocalDate referencia) {
+        return Period.between(dataNascimento, referencia).getYears();
     }
 }

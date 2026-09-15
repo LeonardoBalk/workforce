@@ -47,7 +47,7 @@ public class Principal {
         imprimirSalariosMinimos(funcionarios);
     }
 
-    private static List<Funcionario> cadastrarFuncionarios() {
+    static List<Funcionario> cadastrarFuncionarios() {
         List<Funcionario> funcionarios = new ArrayList<>();
         funcionarios.add(new Funcionario("Maria", LocalDate.of(2000, 10, 18), new BigDecimal("2009.44"), "Operador"));
         funcionarios.add(new Funcionario("João", LocalDate.of(1990, 5, 12), new BigDecimal("2284.38"), "Operador"));
@@ -62,7 +62,7 @@ public class Principal {
         return funcionarios;
     }
 
-    private static void removerJoao(List<Funcionario> funcionarios) {
+    static void removerJoao(List<Funcionario> funcionarios) {
         funcionarios.removeIf(funcionario -> funcionario.getNome().equals("João"));
     }
 
@@ -72,13 +72,13 @@ public class Principal {
         }
     }
 
-    private static void aumentarSalarios(List<Funcionario> funcionarios) {
+    static void aumentarSalarios(List<Funcionario> funcionarios) {
         for (Funcionario funcionario : funcionarios) {
             funcionario.aumentarSalario(new BigDecimal("0.10"));
         }
     }
 
-    private static Map<String, List<Funcionario>> agruparPorFuncao(List<Funcionario> funcionarios) {
+    static Map<String, List<Funcionario>> agruparPorFuncao(List<Funcionario> funcionarios) {
         return funcionarios.stream()
                 .collect(Collectors.groupingBy(Funcionario::getFuncao, LinkedHashMap::new, Collectors.toList()));
     }
@@ -91,6 +91,10 @@ public class Principal {
     }
 
     private static void imprimirAniversariantes(List<Funcionario> funcionarios) {
+        imprimirFuncionarios(filtrarAniversariantes(funcionarios));
+    }
+
+    static List<Funcionario> filtrarAniversariantes(List<Funcionario> funcionarios) {
         List<Funcionario> aniversariantes = new ArrayList<>();
         for (Funcionario funcionario : funcionarios) {
             int mes = funcionario.getDataNascimento().getMonthValue();
@@ -98,25 +102,36 @@ public class Principal {
                 aniversariantes.add(funcionario);
             }
         }
-        imprimirFuncionarios(aniversariantes);
+        return aniversariantes;
     }
 
     private static void imprimirMaisVelho(List<Funcionario> funcionarios) {
-        Funcionario maisVelho = Collections.min(funcionarios, Comparator.comparing(Funcionario::getDataNascimento));
+        Funcionario maisVelho = encontrarMaisVelho(funcionarios);
         System.out.println("Nome: " + maisVelho.getNome() + " | Idade: " + maisVelho.getIdade());
     }
 
+    static Funcionario encontrarMaisVelho(List<Funcionario> funcionarios) {
+        return Collections.min(funcionarios, Comparator.comparing(Funcionario::getDataNascimento));
+    }
+
     private static void imprimirOrdemAlfabetica(List<Funcionario> funcionarios) {
+        imprimirFuncionarios(ordenarPorNome(funcionarios));
+    }
+
+    static List<Funcionario> ordenarPorNome(List<Funcionario> funcionarios) {
         List<Funcionario> ordenados = new ArrayList<>(funcionarios);
         ordenados.sort(Comparator.comparing(Funcionario::getNome));
-        imprimirFuncionarios(ordenados);
+        return ordenados;
     }
 
     private static void imprimirSomaSalarios(List<Funcionario> funcionarios) {
-        BigDecimal total = funcionarios.stream()
+        System.out.println(Formatador.formatarValor(somarSalarios(funcionarios)));
+    }
+
+    static BigDecimal somarSalarios(List<Funcionario> funcionarios) {
+        return funcionarios.stream()
                 .map(Funcionario::getSalario)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        System.out.println(Formatador.formatarValor(total));
     }
 
     private static void imprimirSalariosMinimos(List<Funcionario> funcionarios) {
